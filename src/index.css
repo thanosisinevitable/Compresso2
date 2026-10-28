@@ -1,0 +1,53 @@
+/* Application styles are loaded by App.jsx. */
+
+/* Keep every scroll surface consistent, including dialogs and image previews. */
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: #111014;
+  border-radius: 999px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #55505f;
+  border: 3px solid #111014;
+  border-radius: 999px;
+  min-height: 32px;
+  min-width: 32px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #9e8cb5;
+}
+
+::-webkit-scrollbar-thumb:active {
+  background: #c6b4e9;
+}
+
+::-webkit-scrollbar-corner {
+  background: #111014;
+}
+
+@supports not selector(::-webkit-scrollbar) {
+  * {
+    scrollbar-width: thin;
+    scrollbar-color: #82738f #111014;
+  }
+}
+
+@media (forced-colors: active) {
+  ::-webkit-scrollbar-track,
+  ::-webkit-scrollbar-corner {
+    background: Canvas;
+  }
+
+  ::-webkit-scrollbar-thumb,
+  ::-webkit-scrollbar-thumb:hover,
+  ::-webkit-scrollbar-thumb:active {
+    background: ButtonText;
+    border-color: Canvas;
+  }
+}

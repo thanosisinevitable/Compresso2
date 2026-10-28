@@ -1,0 +1,26 @@
+# Keep application source portable.
+* text=auto eol=lf
+start text eol=lf
+*.command text eol=lf
+
+# Binary assets should not appear as textual diffs.
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.tif binary
+*.tiff binary
+*.webp binary
+*.bmp binary
+*.pdf binary
+*.zip binary
+*.bin binary
+*.zlib binary
+*.cvault binary
+*.icns binary
+*.ico binary
+
+# Fixtures retain exact bytes, including text revision sequences.
+samples/** -text
+samples/*.md text eol=lf
+samples/*.json text eol=lf
+samples/SHA256SUMS.txt text eol=lf

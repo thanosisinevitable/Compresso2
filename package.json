@@ -1,0 +1,102 @@
+{
+  "name": "compresso",
+  "private": true,
+  "version": "2.2.0",
+  "main": "main.js",
+  "type": "module",
+  "scripts": {
+    "dev": "node scripts/dev.mjs",
+    "build": "vite build",
+    "lint": "eslint .",
+    "preview": "vite preview",
+    "start": "npm run build && electron .",
+    "test": "node scripts/python.mjs -m pytest tests -q",
+    "test:ui": "node scripts/test-ui.mjs",
+    "backend:build": "node scripts/python.mjs scripts/build_backend.py",
+    "dist:mac": "node scripts/package.mjs",
+    "dist": "npm run dist:mac",
+    "test:ui:dom": "node scripts/test-ui-dom.mjs",
+    "test:package": "node scripts/verify-package.mjs"
+  },
+  "build": {
+    "appId": "com.bigb.compresso",
+    "productName": "Compresso",
+    "asar": true,
+    "directories": {
+      "output": "release"
+    },
+    "files": [
+      "dist/**/*",
+      "main.js",
+      "preload.cjs",
+      "electron/**/*",
+      "package.json"
+    ],
+    "extraResources": [
+      {
+        "from": "build/backend/compresso-backend",
+        "to": "backend"
+      },
+      {
+        "from": "build/ghostscript",
+        "to": "ghostscript"
+      }
+    ],
+    "mac": {
+      "icon": "icon.icns",
+      "category": "public.app-category.utilities",
+      "target": [
+        "dmg",
+        "zip"
+      ],
+      "identity": null,
+      "hardenedRuntime": false
+    },
+    "dmg": {
+      "title": "Compresso 2.2",
+      "contents": [
+        {
+          "x": 140,
+          "y": 180,
+          "type": "file"
+        },
+        {
+          "x": 420,
+          "y": 180,
+          "type": "link",
+          "path": "/Applications"
+        }
+      ]
+    },
+    "artifactName": "Compresso-${version}-${arch}.${ext}"
+  },
+  "dependencies": {
+    "framer-motion": "^12.12.1",
+    "lucide-react": "^0.468.0",
+    "react": "^19.1.0",
+    "react-dom": "^19.1.0",
+    "recharts": "^3.8.0"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.25.0",
+    "@testing-library/react": "^16.3.3",
+    "@types/react": "^19.1.2",
+    "@types/react-dom": "^19.1.2",
+    "@vitejs/plugin-react": "^4.4.1",
+    "electron": "44.7.0",
+    "electron-builder": "^26.0.12",
+    "eslint": "^9.25.0",
+    "eslint-plugin-react-hooks": "^5.2.0",
+    "eslint-plugin-react-refresh": "^0.4.19",
+    "globals": "^16.0.0",
+    "jsdom": "^30.1.2",
+    "playwright": "^1.64.0",
+    "vite": "^6.3.5"
+  },
+  "description": "Local compression, duplicate discovery and byte entropy for macOS",
+  "author": "Compresso",
+  "license": "UNLICENSED",
+  "engines": {
+    "node": ">=22"
+  }
+}

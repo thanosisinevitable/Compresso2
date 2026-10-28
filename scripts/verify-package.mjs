@@ -1,0 +1,17 @@
+import { createRequire } from 'node:module';
+import assert from 'node:assert/strict';
+import { promises as fs } from 'node:fs';
+const require=createRequire(import.meta.url);
+const {validateSchema}=require('app-builder-lib/out/util/config/schemaValidator.js');
+const schema=require('app-builder-lib/scheme.json');
+const pkg=JSON.parse(await fs.readFile('package.json','utf8'));
+validateSchema(schema,pkg.build,{name:'Electron Builder'});
+for(const file of ['main.js','preload.cjs','electron/backend.mjs','icon.icns','dist/index.html','scripts/build_backend.py'])await fs.access(file);
+assert.ok(pkg.build.mac.target.includes('dmg'));
+assert.ok(pkg.build.extraResources.some(resource=>resource.to==='backend'));
+assert.ok(pkg.build.extraResources.some(resource=>resource.to==='ghostscript'));
+const html=await fs.readFile('dist/index.html','utf8');
+assert.ok(html.includes("script-src 'self';"),'Packaged scripts must keep the strict production CSP');
+assert.ok(!html.includes('src="/src/'),'Packaged HTML must load Vite output');
+console.log('PASS: Electron Builder schema, Mac targets, runtime resource declarations, production entry and CSP.');
+console.log('This is a configuration check; native .app/.dmg creation still requires macOS.');

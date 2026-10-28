@@ -1,0 +1,30 @@
+name: Verify and build macOS
+on:
+  workflow_dispatch:
+jobs:
+  macos:
+    runs-on: macos-14
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: brew install ghostscript
+      - run: python -m venv .venv
+      - run: .venv/bin/python -m pip install -r backend/requirements-dev.txt
+      - run: npm ci
+      - run: npm test && npm run lint && npm run build
+      - run: .venv/bin/python scripts/smoke_backend.py
+      - run: npx playwright install chromium
+      - run: npm run test:ui
+      - run: npm run dist:mac
+      - uses: actions/upload-artifact@v4
+        with:
+          name: Compresso-macOS
+          path: |
+            release/*.dmg
+            release/*.zip
